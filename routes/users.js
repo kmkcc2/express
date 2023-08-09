@@ -1,24 +1,16 @@
 const express = require("express");
-
+const { User } = require("../models/index.js");
 const router = express.Router();
-
+const { create, findAll, findOne, update, destroy } = require("../controllers/user.controller.js");
 router
   .route("/:id")
-  .get((req, res) => {
-    const id = req.params.id;
-    res.send("User get " + id);
-  })
-  .put((req, res) => {
-    const id = req.params.id;
-    res.send("User put " + id);
-  })
-  .delete((req, res) => {
-    const id = req.params.id;
-    res.send("User delete  " + id);
-  });
+  .get(findOne)
+  .put(update)
+  .delete(destroy);
 
-router.route("/").get((req, res) => {
-  res.send("All users");
-});
+router
+  .route("/")
+  .get(findAll)
+  .post(create);
 
 module.exports = router;
