@@ -34,7 +34,7 @@ exports.findAll = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message:
-                err.message || "Some error occurred while creating new user."
+                err.message || "Some error occurred while while looking for users."
             });
         });
 }
@@ -54,7 +54,7 @@ exports.findOne = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message:
-                err.message || "Some error occurred while creating new user."
+                err.message || "Some error occurred while looking for user."
             });
         });
 }
