@@ -1,17 +1,20 @@
 const { User } = require("../models/index")
+const bcrypt  = require("bcrypt");
+const SALT_ROUNDS = 10
 
 exports.create = (req, res) => {
-    if(!req.body.firstName || !req.body.lastName || !req.body.email){
+    if(!req.body.firstName || !req.body.lastName || !req.body.email || !req.body.password){
         res.status(400).send({
             message: 'Content can not be empty!'
         })
         return;
     }
-
+    const hash = bcrypt.hashSync(req.body.password, SALT_ROUNDS);
     const user = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
+        password: hash
     }
 
     User.create(user)
