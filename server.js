@@ -13,6 +13,8 @@ app.use(cors());
 const userRouter = usersRoutes;
 app.use("/users", userRouter);
 
-app.listen(PORT, () => {
-  console.log(`server running on port: http://localhost:${PORT}`);
-});
+const startServer = async () => {
+  const server = await app.listen(PORT);
+  console.log(`Server running on port: http://localhost:${PORT}`);
+};
+startServer();

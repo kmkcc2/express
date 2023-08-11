@@ -1,5 +1,4 @@
 const express = require("express");
-const { User } = require("../models/index.js");
 const router = express.Router();
 const { create, findAll, findOne, update, destroy } = require("../controllers/user.controller.js");
 router
