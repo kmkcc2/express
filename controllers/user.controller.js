@@ -77,7 +77,7 @@ exports.findOne = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const id = req.params.id;
-    if (isNaN(id) || id === " " || id === "") {
+    if (!id) {
       return res.status(400).send({
         message: "Bad request",
       });
