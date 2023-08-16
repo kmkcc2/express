@@ -42,14 +42,14 @@ exports.findAll = async (req, res) => {
 };
 
 exports.findOne = async (req, res) => {
-  try{
+  try {
     const id = req.params.id;
     const user = await User.findByPk(id);
     if (user) return res.send(user);
     return res.status(404).send({
       message: `Cannot find user with id: ${id}`,
     });
-  }catch(err){
+  } catch (err) {
     return res.status(500).send({
       message: "Internal Server Error.",
     });

@@ -1,7 +1,9 @@
 const { param, body } = require("express-validator");
+const { validateRequest } = require("../request-validation.js");
 
 exports.findOneValidation = [
   param("id").isInt().withMessage("Id must be integer."),
+  validateRequest,
 ];
 exports.createValidation = [
   body("firstName")
@@ -24,6 +26,7 @@ exports.createValidation = [
       minUppercase: 0,
     })
     .withMessage("Password must be longer than 8 characters."),
+  validateRequest,
 ];
 exports.putValidation = [
   body("firstName").optional().isString(),
@@ -42,7 +45,9 @@ exports.putValidation = [
       minUppercase: 0,
     })
     .withMessage("Password must be longer than 8 characters."),
+  validateRequest,
 ];
 exports.destroyValidation = [
   param("id").isInt().withMessage("Id must be integer."),
+  validateRequest,
 ];
