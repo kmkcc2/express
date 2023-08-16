@@ -1,4 +1,4 @@
-const { ValidationError } = require("sequelize");
+const { ValidationError, DatabaseError } = require("sequelize");
 const { User } = require("../models/index");
 const bcrypt = require("bcrypt");
 const SALT_ROUNDS = 10;
@@ -44,12 +44,19 @@ exports.findAll = async (req, res) => {
 exports.findOne = async (req, res) => {
   try {
     const id = req.params.id;
+    if (!id) throw new Error("Id must be specified");
     const user = await User.findByPk(id);
     if (user) return res.send(user);
     return res.status(404).send({
       message: `Cannot find user with id: ${id}`,
     });
   } catch (err) {
+    console.log(err);
+    if (err instanceof DatabaseError) {
+      return res.status(400).send({
+        message: "Bad request.",
+      });
+    }
     return res.status(500).send({
       message: "Internal Server Error.",
     });
@@ -59,6 +66,7 @@ exports.findOne = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const id = req.params.id;
+    if (!id) throw new Error("Id must be specified");
     const oldUser = await User.findByPk(id);
     if (!oldUser) {
       return res.status(404).send({
@@ -87,7 +95,7 @@ exports.update = async (req, res) => {
       message: `Cannot update User with id=${id}, req.body is empty!`,
     });
   } catch (err) {
-    console.log(err.message);
+    console.log(err);
     if (err instanceof ValidationError) {
       return res.status(422).send({
         message: err.errors[0].message,
@@ -102,6 +110,7 @@ exports.update = async (req, res) => {
 exports.destroy = async (req, res) => {
   try {
     const id = req.params.id;
+    if (!id) throw new Error("Id must be specified");
     const response = await User.destroy({
       where: { id },
     });
@@ -115,6 +124,11 @@ exports.destroy = async (req, res) => {
     });
   } catch (err) {
     console.log(err.message);
+    if (err instanceof DatabaseError) {
+      return res.status(400).send({
+        message: "Bad request.",
+      });
+    }
     return res.status(500).send({
       message: "Internal Server Error.",
     });
