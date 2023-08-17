@@ -1,10 +1,10 @@
-const express = require("express");
-const { validationResult } = require("express-validator");
+import express, { NextFunction, Request, Response } from "express";
+import { validationResult } from "express-validator";
 
-exports.validateRequest = (validation) => {
+export const validateRequest = (validation: any[]) => {
   let flattenedValidationArrays = validation.flat(Infinity);
   let validationArray = [...flattenedValidationArrays];
-  validationArray.push((req, res, next) => {
+  validationArray.push((req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
