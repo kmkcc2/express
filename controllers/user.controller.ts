@@ -2,13 +2,9 @@ import { Request, Response } from "express";
 import { ValidationError, DatabaseError } from "sequelize";
 import db from "../models/index";
 import bcrypt from "bcrypt";
+import { TypedRequestBody } from "../common/interfaces";
 const SALT_ROUNDS = 10;
-
-const DB: any = db;
-const { User } = DB;
-interface TypedRequestBody<T> extends Request {
-  body: T;
-}
+const User = db.models.User;
 
 export const create = async (
   req: TypedRequestBody<{
@@ -47,8 +43,7 @@ export const create = async (
 
 export const findAll = async (req: Request, res: Response) => {
   try {
-    console.log(db.User)
-    res.send(await db.user.findAll());
+    res.send(await User.findAll());
   } catch (err) {
     if (err instanceof Error) console.log(err.message);
     res.status(500).send({
