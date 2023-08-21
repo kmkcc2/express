@@ -1,42 +1,42 @@
-import { body } from "express-validator";
+import { body } from 'express-validator'
 
 export const createValidation = [
-  body("firstName")
+  body('firstName')
     .notEmpty()
-    .withMessage("First name must be present.")
+    .withMessage('First name must be present.')
     .isString(),
-  body("lastName")
+  body('lastName')
     .notEmpty()
-    .withMessage("Last name must be present.")
+    .withMessage('Last name must be present.')
     .isString(),
-  body("email")
+  body('email')
     .isEmail()
-    .withMessage("Email field must be an actual email address."),
-  body("password")
+    .withMessage('Email field must be an actual email address.'),
+  body('password')
     .isStrongPassword({
       minLength: 8,
       minLowercase: 0,
       minNumbers: 0,
       minSymbols: 0,
-      minUppercase: 0,
+      minUppercase: 0
     })
-    .withMessage("Password must be longer than 8 characters."),
-];
+    .withMessage('Password must be longer than 8 characters.')
+]
 export const putValidation = [
-  body("firstName").optional().isString(),
-  body("lastName").optional().isString(),
-  body("email")
+  body('firstName').optional().isString(),
+  body('lastName').optional().isString(),
+  body('email')
     .optional()
     .isEmail()
-    .withMessage("Email field must be an actual email address."),
-  body("password")
+    .withMessage('Email field must be an actual email address.'),
+  body('password')
     .optional()
     .isStrongPassword({
       minLength: 8,
       minLowercase: 0,
       minNumbers: 0,
       minSymbols: 0,
-      minUppercase: 0,
+      minUppercase: 0
     })
-    .withMessage("Password must be longer than 8 characters."),
-];
+    .withMessage('Password must be longer than 8 characters.')
+]
