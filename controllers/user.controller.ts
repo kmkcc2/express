@@ -93,7 +93,11 @@ export const update: any = async (
         message: 'User not found.'
       })
     }
-    console.log(Object.prototype.hasOwnProperty.call(req.body, 'password'))
+    if (Object.keys(req.body).length === 0) {
+      return res.status(404).send({
+        message: `Cannot update User with id=${id}, req.body is empty!`
+      })
+    }
     const newPassword = Object.prototype.hasOwnProperty.call(
       req.body,
       'password'
@@ -120,10 +124,7 @@ export const update: any = async (
         message: 'User was updated successfully.'
       })
     }
-
-    return res.status(404).send({
-      message: `Cannot update User with id=${id}, req.body is empty!`
-    })
+    throw new Error()
   } catch (err) {
     console.log(err)
     if (err instanceof ValidationError) {
@@ -144,7 +145,7 @@ export const destroy: any = async (req: Request, res: Response) => {
     const response = await User.destroy({
       where: { id }
     })
-    if (response !== null) {
+    if (response === 1) {
       return res.send({
         message: 'User was deleted successfully!'
       })
