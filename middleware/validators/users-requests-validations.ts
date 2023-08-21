@@ -1,6 +1,6 @@
-const { body } = require("express-validator");
+import { body } from "express-validator";
 
-exports.createValidation = [
+export const createValidation = [
   body("firstName")
     .notEmpty()
     .withMessage("First name must be present.")
@@ -22,7 +22,7 @@ exports.createValidation = [
     })
     .withMessage("Password must be longer than 8 characters."),
 ];
-exports.putValidation = [
+export const putValidation = [
   body("firstName").optional().isString(),
   body("lastName").optional().isString(),
   body("email")

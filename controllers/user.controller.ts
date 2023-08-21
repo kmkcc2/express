@@ -1,9 +1,20 @@
-const { ValidationError, DatabaseError } = require("sequelize");
-const { User } = require("../models/index");
-const bcrypt = require("bcrypt");
+import { Request, Response } from "express";
+import { ValidationError, DatabaseError } from "sequelize";
+import db from "../models/index";
+import bcrypt from "bcrypt";
+import { TypedRequestBody } from "../common/interfaces";
 const SALT_ROUNDS = 10;
+const User = db.models.User;
 
-exports.create = async (req, res) => {
+export const create = async (
+  req: TypedRequestBody<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  }>,
+  res: Response
+) => {
   const hash = bcrypt.hashSync(req.body.password, SALT_ROUNDS);
   const user = {
     firstName: req.body.firstName,
@@ -23,25 +34,25 @@ exports.create = async (req, res) => {
     const newUser = await User.create(user);
     return res.send(newUser);
   } catch (err) {
-    console.log(err.message);
+    if (err instanceof Error) console.log(err.message);
     return res.status(500).send({
       message: "Internal Server Error",
     });
   }
 };
 
-exports.findAll = async (req, res) => {
+export const findAll = async (req: Request, res: Response) => {
   try {
     res.send(await User.findAll());
   } catch (err) {
-    console.log(err.message);
+    if (err instanceof Error) console.log(err.message);
     res.status(500).send({
       message: "Internal Server Error.",
     });
   }
 };
 
-exports.findOne = async (req, res) => {
+export const findOne = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     if (!id) throw new Error("Id must be specified");
@@ -63,7 +74,15 @@ exports.findOne = async (req, res) => {
   }
 };
 
-exports.update = async (req, res) => {
+export const update = async (
+  req: TypedRequestBody<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  }>,
+  res: Response
+) => {
   try {
     const id = req.params.id;
     if (!id) throw new Error("Id must be specified");
@@ -107,7 +126,7 @@ exports.update = async (req, res) => {
   }
 };
 
-exports.destroy = async (req, res) => {
+export const destroy = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     if (!id) throw new Error("Id must be specified");
@@ -123,7 +142,7 @@ exports.destroy = async (req, res) => {
       message: `User with id: ${id} not found.`,
     });
   } catch (err) {
-    console.log(err.message);
+    if (err instanceof Error) console.log(err.message);
     if (err instanceof DatabaseError) {
       return res.status(400).send({
         message: "Bad request.",

@@ -1,7 +1,7 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const usersRoutes = require("./routes/users.js");
-const cors = require("cors");
+import express from "express";
+import bodyParser from "body-parser";
+import usersRoutes from "./routes/users";
+import cors from "cors";
 require("dotenv").config();
 
 const app = express();
