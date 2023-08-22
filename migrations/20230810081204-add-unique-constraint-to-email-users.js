@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -7,10 +7,10 @@ module.exports = {
       fields: ['email'],
       type: 'unique',
       name: 'unique_email_constraint'
-    });
+    })
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('Users', 'unique_email_constraint');
+    await queryInterface.removeConstraint('Users', 'unique_email_constraint')
   }
-};
+}

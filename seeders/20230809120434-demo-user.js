@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -9,10 +9,10 @@ module.exports = {
       email: 'example@example.com',
       createdAt: new Date(),
       updatedAt: new Date()
-    }]);
+    }])
   },
 
   async down (queryInterface, Sequelize) {
-    return queryInterface.bulkDelete('Users', null, {});
+    return queryInterface.bulkDelete('Users', null, {})
   }
-};
+}
