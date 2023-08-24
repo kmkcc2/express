@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+  database:
+    container_name: database
+    image: postgres:15
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_HOST: ${DB_HOST}
+    restart: always
+    volumes:
+      - db:/var/lib/postgresql/data
+  sequelize-migrate:
+    container_name: sequelize-migrate
+    build: .
+    command: bash -c "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
+    depends_on:
+      - database
+    volumes:
+      - ./migrations:/app/migrations
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - database
+    env_file: .env
+    volumes:
+      - .:/app
+volumes:
+  db:
+    driver: local

@@ -1,7 +1,7 @@
 import { type Request, type Response } from 'express'
 import { ValidationError, DatabaseError } from 'sequelize'
 import db from '../models/index'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { type TypedRequestBody } from '../common/interfaces'
 
 const SALT_ROUNDS = 10
