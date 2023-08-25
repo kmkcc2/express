@@ -11,16 +11,6 @@ services:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_HOST: ${DB_HOST}
     restart: always
-    volumes:
-      - db:/var/lib/postgresql/data
-  sequelize-migrate:
-    container_name: sequelize-migrate
-    build: .
-    command: bash -c "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
-    depends_on:
-      - database
-    volumes:
-      - ./migrations:/app/migrations
   backend:
     container_name: backend
     build:
@@ -33,6 +23,4 @@ services:
     env_file: .env
     volumes:
       - .:/app
-volumes:
-  db:
-    driver: local
+    command: bash -c "npx sequelize-cli db:migrate && npm run start:dev"

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon server.ts"
+    "start:dev": "nodemon --ignore ./node_modules -L server.ts"
   },
   "keywords": [],
   "author": "",

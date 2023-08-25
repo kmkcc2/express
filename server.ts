@@ -15,5 +15,5 @@ const userRouter = usersRoutes
 app.use('/users', userRouter)
 
 app.listen(PORT, () => {
-  console.log(`dupa running on port: http://localhost:${PORT}`)
+  console.log(`server running on port: http://localhost:${PORT}`)
 })
