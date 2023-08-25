@@ -1,7 +1,7 @@
-import dotenv from 'dotenv'
-dotenv.config()
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config()
 
-const conf = {
+module.exports = {
   development: {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
@@ -24,4 +24,3 @@ const conf = {
     dialect: process.env.DB_DIALECT
   }
 }
-export default conf
