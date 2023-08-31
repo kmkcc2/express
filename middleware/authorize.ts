@@ -1,15 +1,15 @@
-import { type Response, type Request } from 'express'
+import { type Response, type Request, type NextFunction } from 'express'
 import jwt, { TokenExpiredError } from 'jsonwebtoken'
-export default function authorize (req: Request, res: Response, next: any): any {
+export default function authorize (req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization
   try {
-    if (typeof authHeader === 'undefined') {
+    if (!authHeader) {
       throw new Error('Authorization header is missing')
     }
     const token = authHeader.split(' ')[1]
     const SECRET = process.env.ACCESS_TOKEN_SECRET as string
     if (token === null) return res.status(401).send({ message: 'Unauthorized' })
-    jwt.verify(token, SECRET, (err, user: any) => {
+    jwt.verify(token, SECRET, (err, user) => {
       if (err != null) {
         if (err instanceof TokenExpiredError) {
           return res.status(403).send({ message: 'Token has expired, please sign in again' })
@@ -18,8 +18,8 @@ export default function authorize (req: Request, res: Response, next: any): any 
       }
       next()
     })
-  } catch (err: any) {
-    console.log(err)
-    return res.status(401).send({ message: 'Unauthorized. ' + err.message })
+  } catch (err) {
+    const msg = err instanceof Error ? 'Unauthorized. ' + err.message : 'Unauthorized'
+    return res.status(401).send({ message: msg })
   }
 }

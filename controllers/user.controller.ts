@@ -1,19 +1,12 @@
 import { type Request, type Response } from 'express'
 import { ValidationError, DatabaseError } from 'sequelize'
-import db from '../models/index'
 import bcrypt from 'bcryptjs'
-import { type TypedRequestBody } from '../common/interfaces'
+import { UserRepository } from '../repositories/user.repository'
 
 const SALT_ROUNDS = 10
-const User = db.models.User
-
-export const create: any = async (
-  req: TypedRequestBody<{
-    firstName: string
-    lastName: string
-    email: string
-    password: string
-  }>,
+const _userRepository = new UserRepository()
+export const create = async (
+  req: Request,
   res: Response
 ) => {
   const hash = bcrypt.hashSync(req.body.password, SALT_ROUNDS)
@@ -24,15 +17,15 @@ export const create: any = async (
     password: hash
   }
   try {
-    const userUniqueEmailCheck = await User.findAll({
-      where: { email: user.email }
-    })
-    if (userUniqueEmailCheck.length > 0) {
+    const userUniqueEmailCheck = await _userRepository.findUserByEmail(
+      user.email
+    )
+    if (userUniqueEmailCheck !== null) {
       return res.status(422).send({
         message: 'Email has already been taken.'
       })
     }
-    const newUser = await User.create(user)
+    const newUser = await _userRepository.createUser(user)
     return res.send(newUser)
   } catch (err) {
     if (err instanceof Error) console.log(err.message)
@@ -42,9 +35,9 @@ export const create: any = async (
   }
 }
 
-export const findAll: any = async (req: Request, res: Response) => {
+export const findAll = async (req: Request, res: Response) => {
   try {
-    res.send(await User.findAll())
+    res.send(await _userRepository.findAll())
   } catch (err) {
     if (err instanceof Error) console.log(err.message)
     res.status(500).send({
@@ -53,11 +46,11 @@ export const findAll: any = async (req: Request, res: Response) => {
   }
 }
 
-export const findOne: any = async (req: Request, res: Response) => {
+export const findOne = async (req: Request, res: Response) => {
   try {
     const id = req.params.id
     if (id === null) throw new Error('Id must be specified')
-    const user = await User.findByPk(id)
+    const user = await _userRepository.findUserById(id)
     if (user !== null) return res.send(user)
     return res.status(404).send({
       message: `Cannot find user with id: ${id}`
@@ -75,19 +68,14 @@ export const findOne: any = async (req: Request, res: Response) => {
   }
 }
 
-export const update: any = async (
-  req: TypedRequestBody<{
-    firstName: string
-    lastName: string
-    email: string
-    password: string
-  }>,
+export const update = async (
+  req: Request,
   res: Response
 ) => {
   try {
     const id = req.params.id
     if (id === null) throw new Error('Id must be specified')
-    const oldUser: any = await User.findByPk(id)
+    const oldUser = await _userRepository.findUserById(id)
     if (oldUser === null) {
       return res.status(404).send({
         message: 'User not found.'
@@ -116,9 +104,7 @@ export const update: any = async (
         : oldUser.email,
       password: newPassword
     }
-    const response = await User.update(userBody, {
-      where: { id }
-    })
+    const response = await _userRepository.updateUser(id, userBody)
     if (response !== null) {
       return res.send({
         message: 'User was updated successfully.'
@@ -138,13 +124,11 @@ export const update: any = async (
   }
 }
 
-export const destroy: any = async (req: Request, res: Response) => {
+export const destroy = async (req: Request, res: Response) => {
   try {
     const id = req.params.id
     if (id === null) throw new Error('Id must be specified')
-    const response = await User.destroy({
-      where: { id }
-    })
+    const response = await _userRepository.deleteUser(id)
     if (response === 1) {
       return res.send({
         message: 'User was deleted successfully!'
