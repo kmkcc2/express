@@ -13,10 +13,11 @@ const PORT = process.env.PORT
 
 app.use(bodyParser.json())
 app.use(cors())
+app.use(verifyContent)
 
 const userRouter = usersRoutes
-app.use('/users', verifyContent, authorize, userRouter)
-app.use('/', verifyContent, authRoutes)
+app.use('/users', authorize, userRouter)
+app.use('/', authRoutes)
 
 app.listen(PORT, () => {
   console.log(`server running on port: http://localhost:${PORT}`)
