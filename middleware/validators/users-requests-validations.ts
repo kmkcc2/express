@@ -1,42 +1,47 @@
-import { body } from 'express-validator'
+export const createValidation = {
+  firstName: {
+    isString: true,
+    notEmpty: true,
+    errorMessage: 'First name must be present.'
+  },
+  lastName: {
+    isString: true,
+    notEmpty: true,
+    errorMessage: 'Last name must be present.'
+  },
+  email: {
+    isEmail: true,
+    errorMessage: 'Email field must be an actual email address.'
+  },
+  password: {
+    isLength: {
+      options: { min: 8 },
+      errorMessage: 'Password should be at least 8 chars'
+    }
+  }
 
-export const createValidation = [
-  body('firstName')
-    .notEmpty()
-    .withMessage('First name must be present.')
-    .isString(),
-  body('lastName')
-    .notEmpty()
-    .withMessage('Last name must be present.')
-    .isString(),
-  body('email')
-    .isEmail()
-    .withMessage('Email field must be an actual email address.'),
-  body('password')
-    .isStrongPassword({
-      minLength: 8,
-      minLowercase: 0,
-      minNumbers: 0,
-      minSymbols: 0,
-      minUppercase: 0
-    })
-    .withMessage('Password must be longer than 8 characters.')
-]
-export const putValidation = [
-  body('firstName').optional().isString(),
-  body('lastName').optional().isString(),
-  body('email')
-    .optional()
-    .isEmail()
-    .withMessage('Email field must be an actual email address.'),
-  body('password')
-    .optional()
-    .isStrongPassword({
-      minLength: 8,
-      minLowercase: 0,
-      minNumbers: 0,
-      minSymbols: 0,
-      minUppercase: 0
-    })
-    .withMessage('Password must be longer than 8 characters.')
-]
+}
+export const putValidation = {
+  firstName: {
+    optional: true,
+    notEmpty: true,
+    isString: true
+  },
+  lastName: {
+    optional: true,
+    notEmpty: true,
+    isString: true
+  },
+  email: {
+    optional: true,
+    isEmail: true,
+    errorMessage: 'Email field must be an actual email address.'
+  },
+  password: {
+    optional: true,
+    isLength: {
+      options: { min: 8 },
+      errorMessage: 'Password should be at least 8 chars'
+    }
+  }
+}

@@ -1,7 +1,8 @@
 import { Table, Column, Model, CreatedAt, UpdatedAt, AutoIncrement, PrimaryKey } from 'sequelize-typescript'
+import { type IUser } from '../common/interfaces'
 
 @Table
-export class User extends Model {
+export class User extends Model implements IUser {
   @AutoIncrement
   @PrimaryKey
   @Column
