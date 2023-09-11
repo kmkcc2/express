@@ -20,7 +20,7 @@ export const create = async (
     const userUniqueEmailCheck = await _userRepository.findUserByEmail(
       user.email
     )
-    if (userUniqueEmailCheck !== null) {
+    if (userUniqueEmailCheck) {
       return res.status(422).send({
         message: 'Email has already been taken.'
       })
