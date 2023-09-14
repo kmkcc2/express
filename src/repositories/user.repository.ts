@@ -13,7 +13,7 @@ export default class UserRepository {
     return await UserModel.findOne({ where: { email } }) as User | null
   }
 
-  static async findUserById (id: string) {
+  static async findUserById (id: string): Promise<User | null> {
     return await UserModel.findByPk(id) as User
   }
 

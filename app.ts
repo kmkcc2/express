@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 import usersRoutes from './src/routes/users'
 import authRoutes from './src/routes/auth'
 import cors from 'cors'
-import authorize from './src/middleware/authorize'
+import { authorize } from './src/middleware/authorize'
 import verifyContent from './src/middleware/verify-content-type'
 const app = express()
 

@@ -1,4 +1,3 @@
-import { isNonNullChain } from 'typescript'
 import app from '../app'
 import { User } from '../src/models/user'
 import UserRepository from '../src/repositories/user.repository'

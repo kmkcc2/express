@@ -23,6 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.authorize = void 0;
 const jsonwebtoken_1 = __importStar(require("jsonwebtoken"));
 function authorize(req, res, next) {
     const authHeader = req.headers.authorization;
@@ -49,4 +50,4 @@ function authorize(req, res, next) {
         return res.status(401).send({ message: msg });
     }
 }
-exports.default = authorize;
+exports.authorize = authorize;
