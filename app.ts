@@ -11,9 +11,7 @@ app.use(bodyParser.json())
 app.use(cors())
 app.use(verifyContent)
 
-const userRouter = usersRoutes
-
-app.use('/users', authorize, userRouter)
+app.use('/users', authorize, usersRoutes)
 app.use('/', authRoutes)
 
 export default app
