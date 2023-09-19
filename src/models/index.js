@@ -8,10 +8,7 @@ const env = process.env.NODE_ENV ?? 'development'
 const configEnv = config[env]
 
 const sequelize = new Sequelize(
-  configEnv.database,
-  configEnv.username,
-  configEnv.password,
-  configEnv
+  configEnv.DATABASE_URL
 )
 sequelize.addModels([User])
 
