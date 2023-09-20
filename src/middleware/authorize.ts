@@ -1,6 +1,6 @@
 import { type Response, type Request, type NextFunction } from 'express'
 import jwt, { TokenExpiredError } from 'jsonwebtoken'
-export default function authorize (req: Request, res: Response, next: NextFunction) {
+export function authorize (req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization
   try {
     if (!authHeader) {

@@ -1,10 +1,9 @@
 import { type Request, type Response } from 'express'
 import { ValidationError, DatabaseError } from 'sequelize'
 import bcrypt from 'bcryptjs'
-import { UserRepository } from '../repositories/user.repository'
+import UserRepository from '../repositories/user.repository'
 
 const SALT_ROUNDS = 10
-const _userRepository = new UserRepository()
 export const create = async (
   req: Request,
   res: Response
@@ -17,7 +16,7 @@ export const create = async (
     password: hash
   }
   try {
-    const userUniqueEmailCheck = await _userRepository.findUserByEmail(
+    const userUniqueEmailCheck = await UserRepository.findUserByEmail(
       user.email
     )
     if (userUniqueEmailCheck) {
@@ -25,7 +24,7 @@ export const create = async (
         message: 'Email has already been taken.'
       })
     }
-    const newUser = await _userRepository.createUser(user)
+    const newUser = await UserRepository.createUser(user)
     return res.send(newUser)
   } catch (err) {
     if (err instanceof Error) console.log(err.message)
@@ -37,7 +36,7 @@ export const create = async (
 
 export const findAll = async (req: Request, res: Response) => {
   try {
-    res.send(await _userRepository.findAll())
+    res.send(await UserRepository.findAll())
   } catch (err) {
     if (err instanceof Error) console.log(err.message)
     res.status(500).send({
@@ -50,7 +49,7 @@ export const findOne = async (req: Request, res: Response) => {
   try {
     const id = req.params.id
     if (id === null) throw new Error('Id must be specified')
-    const user = await _userRepository.findUserById(id)
+    const user = await UserRepository.findUserById(id)
     if (user !== null) return res.send(user)
     return res.status(404).send({
       message: `Cannot find user with id: ${id}`
@@ -75,7 +74,7 @@ export const update = async (
   try {
     const id = req.params.id
     if (id === null) throw new Error('Id must be specified')
-    const oldUser = await _userRepository.findUserById(id)
+    const oldUser = await UserRepository.findUserById(id)
     if (oldUser === null) {
       return res.status(404).send({
         message: 'User not found.'
@@ -104,7 +103,7 @@ export const update = async (
         : oldUser.email,
       password: newPassword
     }
-    const response = await _userRepository.updateUser(id, userBody)
+    const response = await UserRepository.updateUser(id, userBody)
     if (response !== null) {
       return res.send({
         message: 'User was updated successfully.'
@@ -128,7 +127,7 @@ export const destroy = async (req: Request, res: Response) => {
   try {
     const id = req.params.id
     if (id === null) throw new Error('Id must be specified')
-    const response = await _userRepository.deleteUser(id)
+    const response = await UserRepository.deleteUser(id)
     if (response === 1) {
       return res.send({
         message: 'User was deleted successfully!'

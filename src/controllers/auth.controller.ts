@@ -1,15 +1,13 @@
 import bcrypt from 'bcryptjs'
 import { type Response, type Request } from 'express'
 import jwt from 'jsonwebtoken'
-import { UserRepository } from '../repositories/user.repository'
-
-const _userRepository = new UserRepository()
+import UserRepository from '../repositories/user.repository'
 
 export const login = async (
   req: Request,
   res: Response
 ) => {
-  const user = await _userRepository.findUserByEmail(req.body.email)
+  const user = await UserRepository.findUserByEmail(req.body.email)
   if (!user) {
     return res
       .status(404)
