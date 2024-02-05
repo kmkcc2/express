@@ -11,7 +11,11 @@ const sequelize = new Sequelize(
   configEnv.database,
   configEnv.username,
   configEnv.password,
-  configEnv
+  {
+    host: configEnv.host,
+    dialect: configEnv.dialect,
+    port: configEnv.port
+  }
 )
 sequelize.addModels([User])
 
